@@ -3,7 +3,7 @@ import axios from 'axios';
 const envApiUrl = String(import.meta.env.VITE_API_URL || '').trim();
 const isPlaceholderUrl = envApiUrl.includes('your-render-backend-url.onrender.com');
 const localApiUrl = 'http://localhost:5000/api';
-const remoteApiUrl = 'https://telemedicine-server-1-aci0.onrender.com/api';
+const remoteApiUrl = 'https://telemedicine-server-km4z.onrender.com';
 
 const normalizeApiBaseUrl = (url) => {
   const trimmed = String(url || '').trim().replace(/\/+$/, '');
