@@ -70,7 +70,13 @@ const RegisterPage = () => {
       login(response.data.token, response.data.user);
       navigate(`/${response.data.user.role}`);
     } catch (requestError) {
-      setError(requestError.response?.data?.message || 'Unable to register');
+      if (requestError.response?.data?.message) {
+        setError(requestError.response.data.message);
+      } else if (requestError.message === 'Network Error') {
+        setError('Cannot reach server. Check backend URL and CORS settings.');
+      } else {
+        setError('Unable to register');
+      }
     } finally {
       setLoading(false);
     }
