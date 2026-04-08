@@ -1,7 +1,26 @@
 import axios from 'axios';
 
+const envApiUrl = String(import.meta.env.VITE_API_URL || '').trim();
+const isPlaceholderUrl = envApiUrl.includes('your-render-backend-url.onrender.com');
+const localApiUrl = 'http://localhost:5000/api';
+const remoteApiUrl = 'https://telemedicine-server-1-aci0.onrender.com/api';
+
+const normalizeApiBaseUrl = (url) => {
+  const trimmed = String(url || '').trim().replace(/\/+$/, '');
+  if (!trimmed) {
+    return '';
+  }
+
+  return trimmed.endsWith('/api') ? trimmed : `${trimmed}/api`;
+};
+
+const normalizedEnvApiUrl = normalizeApiBaseUrl(envApiUrl);
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'https://telemedicine-server-1-aci0.onrender.com/api',
+  // In local development always target local backend so registration/login writes to local MongoDB.
+  baseURL: import.meta.env.DEV
+    ? localApiUrl
+    : (!normalizedEnvApiUrl || isPlaceholderUrl ? remoteApiUrl : normalizedEnvApiUrl),
 });
 
 api.interceptors.request.use((config) => {
